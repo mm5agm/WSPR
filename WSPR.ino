@@ -21,7 +21,6 @@ void initialiseWiFi() {
   int attempts = 0;
   WiFi.mode(WIFI_OFF);  //Prevents reconnection issue (taking too long to connect)
   WiFi.mode(WIFI_STA);  //This line hides the viewing of ESP as wifi hotspot
-
   Serial.print("Connecting to Wi-Fi   ");
   Serial.println(ssid);
   Serial.println(password);
@@ -70,7 +69,7 @@ void showDate(strDateTime now) {
 }
 void loop() {
   do {
-    NTPdateTime = NTPch.getNTPtime(TIME_ZONE, DST_OFFSET);  //1 for European summer time; 2 for US daylight saving time; 0 for no DST adjustment; ( not tested by me)
+    NTPdateTime = NTPch.getNTPtime(TIME_ZONE, DST_OFFSET); 
     delay(1);
   } while (!NTPdateTime.valid);  // keep trying till you get a valid time
   if (NTPdateTime.valid) {
