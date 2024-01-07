@@ -3,7 +3,7 @@ A simple test program to get date and time from an NTP server
   NTP library is https://github.com/SensorsIot/NTPtimeESP 
   you're allowed to get the time every 4 seconds but 1 or twice a day to update a real time clock 
   should be sufficient
-
+added
 */
 #include <NTPtimeESP.h>
 //NTP Server:
