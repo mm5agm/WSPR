@@ -1,3 +1,0 @@
-/* 
-Holding point for Code for a WSPR transmitter
-*/
