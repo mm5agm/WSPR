@@ -33,35 +33,41 @@ void setup() {
 ***   of loop()                                                         ***
 ***************************************************************************/
 void loop() {
-  int error, address;
-  int numDevices;
+  /* The I2C address is a 7-bit address so can be from 0 to 127 however 
+  addresses 0 to 7, and 120 to 127 are reserved.
+  */
+
+  int startAddress = 8;
+  int endAddress = 119;
+  int error, address, numDevices;
 
   Serial.println("Scanning...");
   numDevices = 0;
-  for (address = 1; address < 127; address++)  // I2C addresses start at 1 and go up to 127
-  {
+  for (address = 8; address < 120; address++) {  // valid I2C addresses are from 8 to 119
     Wire.beginTransmission(address);
     error = Wire.endTransmission();
     if (error == 0) {
-      Serial.print("I2C device found at address 0x");
-      if (address < 16)
+      if (address < 16) {
+        Serial.print("I2C device found at address 0x");
         Serial.print("0");
-      Serial.print(address, HEX);
-      Serial.println(" !");
-      numDevices++;
+        Serial.print(address, HEX);
+        Serial.println(" !");
+        numDevices++;
+      } else {
+        Serial.print("I2C device found at address 0x");
+        Serial.print(address, HEX);
+        Serial.println(" !");
+        numDevices++;
+      }
+      delay(1000);
     } else if (error == 4) {
       Serial.print("Unknown error at address 0x");
-      if (address < 16)
+      if (address < 16) {
         Serial.print("0");
-      Serial.println(address, HEX);
+        Serial.println(address, HEX);
+      } else {
+        Serial.println(address, HEX);
+      }
     }
-  }
-  if (numDevices == 0) {
-    Serial.println("No I2C devices found\n");
-  } else {
-    Serial.print("Finished Scanning. Number of devices found = ");
-    Serial.println(numDevices);
-    Serial.println(" Fresh scan starting in 5 seconds");
-    delay(5000);  // wait 5 seconds for next scan
   }
 }
