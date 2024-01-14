@@ -23,7 +23,7 @@ NTPtime NTPch(NTP_Server);  //make an instance to work with
 strDateTime NTPdateTime;           //strDateTime is declared in NTPtimeESP.h as a type
 const char* ssid = "*********";        // SSID of your Wifi network
 const char* password = "******";  // Password of your wifi network
-int failCount = 60;                // maximun number of times to attempt to connect to wi-fi. Attempts are 500Ms appart
+int failCount = 60; 
 int BAUDRATE = 9600;
 #define DST_OFFSET 0     //  1 for European summer time; 2 for US daylight saving time; 0 for no DST adjustment;
 #define TIME_ZONE +0.0f  // used in NTP time calculation. UTC time zone difference in regards to UTC (floating point number)
@@ -97,5 +97,6 @@ void loop() {
   if (NTPdateTime.valid) {
     showDate(NTPdateTime);
   }
+  Serial.println("Updating time in 10 seconds");
   delay(10000);  // the keepers of the NTP servers will ban you if you request the time more often than once every 4 seconds so we'll retry after 10 seconds
 }
