@@ -18,13 +18,13 @@ A simple test program to get date and time from an NTP server and update a real 
   Real Time Clock library is Adafruit 2.1.3 for RTC like DS3231
 */
 
-#include <NTPtimeESP.h>
-#include <RTClib.h>  // Adafruit 2.1.3 for RTC like DS3231
+#include <NTPtimeESP.h>               //  https://github.com/SensorsIot/NTPtimeESP 
+#include <RTClib.h>                   // Adafruit 2.1.3 for RTC like DS3231
 
-const char* ssid = "*******";                                                  // SSID of your Wifi network
-const char* password = "******";                                            // Password of your wifi network
-RTC_DS3231 rtc;                                                                  // create an instance of the real time clock
-const char* weekDays[] = { "Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat" };  // weekDays[0] = "Sun",  weekDays[6] = "Sat"
+const char* ssid = "*******";         // SSID of your Wifi network
+const char* password = "******";      // Password of your wifi network
+RTC_DS3231 rtc;                       // create an instance of the real time clock
+const char* weekDays[] = { "Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat" }; //RTC 0-6, NTP 1-7
 //NTP Server:
 const char* NTP_Server = "uk.pool.ntp.org";  // pick an ntp server in your area
 NTPtime NTPch(NTP_Server);                   //make an instance of an NTP server to work with
@@ -88,7 +88,7 @@ void initialiseWiFi() {  // will attempt to connect to the local router/hub
 *******************************************************************/
 void serialShowDateTimeNTP(strDateTime ntpDateTime) {
   Serial.print("  NTP queried - ");
-  Serial.print(weekDays[ntpDateTime.dayofWeek - 1]);  //doesn't work. It prints the password first!
+  Serial.print(weekDays[ntpDateTime.dayofWeek - 1]);  //NTP library has days 1 to 7,  Sunday to Saturday
   Serial.print("  ");
   Serial.print(padZero(ntpDateTime.day));
   Serial.print("/");
@@ -110,7 +110,7 @@ void serialShowDateTimeNTP(strDateTime ntpDateTime) {
 *******************************************************************/
 void serialShowDateTimeRTC(DateTime rtcDateTime) {
   Serial.print("RTC - ");
-  Serial.print(weekDays[rtcDateTime.dayOfTheWeek()]);
+  Serial.print(weekDays[rtcDateTime.dayOfTheWeek()]);  //RTC library has days 0 to 6 Sunday to Saturday
   Serial.print("  ");
   Serial.print(padZero(rtcDateTime.day()));
   Serial.print("/");
