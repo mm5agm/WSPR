@@ -39,14 +39,15 @@ int BAUDRATE = 9600;
 *** As I want to use this inside other functions, I can't declare it as "void" so I       ***
 *** declare it as returning a pointer to a character and send back ""                                 ***
 *********************************************************************************************/
-char* padZero(int aNumber) {
+char padZero(int aNumber) {
+  char result[1] = {""};
   if (aNumber < 10) {
     Serial.print("0");
     Serial.print(aNumber);
   } else {
     Serial.print(aNumber);
   }
-  return "";
+  return *result;
 }
 /********************************************
 ***    Initialse and connect to Wi-Fi     ***
