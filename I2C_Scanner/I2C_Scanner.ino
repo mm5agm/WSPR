@@ -13,7 +13,7 @@ See the GNU General Public License for more details.
 /* This is the second of a series of programs that culminate in a WSPR beacon transmitter.
  Hardware required = ESP32 and Real Time Clock DS3231
  Each program builds on the previous one by adding 1 component or more code.
- This program gets the I2C addess of the RTC and report what's found
+ This program gets the I2C addess of the RTC and report what's found to the serial monitor.
 */
 
 #include <Wire.h>
