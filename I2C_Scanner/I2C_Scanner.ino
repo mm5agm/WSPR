@@ -10,9 +10,10 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 See the GNU General Public License for more details.
 */
-/* 
-A simple test program to scan the I2C bus addresses and report what's found
-to the serial monitor
+/* This is the second of a series of programs that culminate in a WSPR beacon transmitter.
+ Hardware required = ESP32 and Real Time Clock DS3231
+ Each program builds on the previous one by adding 1 component or more code.
+ This program gets the I2C addess of the RTC and report what's found
 */
 
 #include <Wire.h>

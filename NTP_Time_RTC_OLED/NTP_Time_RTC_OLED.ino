@@ -9,13 +9,17 @@ This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 */
-/* 
-A simple test program to get date and time from an NTP server and update a real time clock
-  Unfortuneately the 2 libraries I use to get time define time differently
+/* This is the fourth of a series of programs that culminate in a WSPR beacon transmitter.
+ Hardware required = ESP32,Real Time Clock DS3231, and SSD1306 0.96inch OLED display.
+ Each program builds on the previous one by adding 1 component or more code.
+ This program gets the date and time from an NTP server and uses this to update
+ a real time clock. Output is formatted date and time to the serial monitor and the OLED.
+  Unfortuneately the 2 libraries I use to get time define time differently.
   The NTP library has days 0 to 6, with 0 = Sunday and 6 = Saturday
   The RTC library has days 1 to 7, with 1 = Sunday and 7 = Saturday
   NTP library is https://github.com/SensorsIot/NTPtimeESP 
   Real Time Clock library is Adafruit 2.1.3 for RTC like DS3231
+  OLED library is Adafruit_SSD1306 which also requires Adafruit_GFX.h
 */
 
 #include <NTPtimeESP.h>

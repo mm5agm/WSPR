@@ -10,11 +10,12 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 */
 /*
-A simple test program to get date and time from an NTP server
-  There is no formatting of the date and time, that will be done in a later program, NPT_Time_With_RTC.ino
-  The NTP library is https://github.com/SensorsIot/NTPtimeESP 
-  NTP servers allow you to get the time every 4 seconds but 1 or twice a day to update a real time clock 
-  should be sufficient. If you query more often you risk being banned from that server.
+ This is the first of a series of programs that culminate in a WSPR beacon transmitter.
+ Hardware required = ESP32 
+ Each program builds on the previous one by adding 1 component or more code.
+ This program gets the date and time from an NTP server. There is no formatting of the date and time, that will be done in a later program.
+ The NTP library is https://github.com/SensorsIot/NTPtimeESP 
+ NTP servers allow you to get the time every 4 seconds but once a day to update a real time clock should be sufficient. If you query more often you risk being banned from that server.
 */
 #include <NTPtimeESP.h>
 
