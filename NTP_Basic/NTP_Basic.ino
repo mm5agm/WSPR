@@ -18,8 +18,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
  The NTP library is https://github.com/SensorsIot/NTPtimeESP 
  NTP servers allow you to get the time approximately every 4 seconds but once a day
  to update a real time clock should be sufficient. If you query more often than every
- 4 seconds you risk being
- banned from that server.
+ 4 seconds you risk being banned from that server.
 */
 #include <NTPtimeESP.h>
 
