@@ -14,12 +14,12 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public
  Each program builds on the previous one by adding 1 component or more code.
  This program gets the date and time from an NTP server and uses this to update
  a real time clock. Output is formatted date and time to the serial monitor.
-  Unfortuneately the 2 libraries I use to get time define time differently.
-  The NTP library has days 0 to 6, with 0 = Sunday and 6 = Saturday
-  The RTC library has days 1 to 7, with 1 = Sunday and 7 = Saturday
-  NTP library is https://github.com/SensorsIot/NTPtimeESP 
-  Real Time Clock library is Adafruit 2.1.3 for RTC like DS3231
-  Program shows date and time formatted from NTP and RTC
+ Unfortuneately the 2 libraries I use to get time define time differently.
+ The NTP library has days 0 to 6, with 0 = Sunday and 6 = Saturday
+ The RTC library has days 1 to 7, with 1 = Sunday and 7 = Saturday
+ NTP library is https://github.com/SensorsIot/NTPtimeESP 
+ Real Time Clock library is Adafruit 2.1.3 for RTC like DS3231
+ The program shows date and time formatted from NTP and RTC
 */
 
 #include <NTPtimeESP.h>                // https://github.com/SensorsIot/NTPtimeESP 
