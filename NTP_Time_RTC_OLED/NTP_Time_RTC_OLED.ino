@@ -1,47 +1,49 @@
-/* 
-Author Colin Campbell MM5AGM
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+/*****************************************************************************************************************
+***                                 Author Colin Campbell MM5AGM mm5agm@outlook.com                            ***                                                                                                            ***
+*** This program is free software: you can redistribute it and/or modify it under the terms of the GNU         ***
+*** General Public License as published by the Free Software Foundation, either version 3 of the License,      ***
+*** or (at your option) any later version.                                                                     ***
+***                                                                                                            ***
+*** This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without          ***
+*** even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                          ***
+*** See the GNU General Public License for more details.                                                       ***
+******************************************************************************************************************/
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-*/
-/* This is the fourth of a series of programs that culminate in a WSPR beacon transmitter.
- Hardware required = ESP32,Real Time Clock DS3231, and SSD1306 0.96inch OLED display.
- Each program builds on the previous one by adding 1 component or more code.
- This program gets the date and time from an NTP server and uses this to update
- a real time clock. Output is formatted date and time to the serial monitor and the OLED.
- Unfortuneately the 2 libraries I use to get time define time differently.
- The NTP library has days 0 to 6, with 0 = Sunday and 6 = Saturday
- The RTC library has days 1 to 7, with 1 = Sunday and 7 = Saturday
- NTP library is https://github.com/SensorsIot/NTPtimeESP 
- Real Time Clock library is Adafruit 2.1.3 for a RTC like DS3231
- OLED library is Adafruit_SSD1306 which also requires Adafruit_GFX.h
-*/
+/*****************************************************************************************************************
+*** This is the fourth in a series of programs that culminates in a WSPR beacon transmitter. Each program      ***
+*** builds on the previous one by adding 1 component or more code. This program gets the date and time from an ***
+*** NTP server and updates a real time clock. The OLED display, and Serial Monitor show the results. Note that ***
+*** the displayed time will be slightly behind the real time because of the delay(1000) in the loop()          ***
+*** Unfortuneately the 2 libraries I use to get time define time differently. The RTC is updated every         ***
+*** 2 minutes from the NTP server                                                                              ***
+*** The NTP library has days 0 to 6, with 0 = Sunday and 6 = Saturday                                          ***
+*** The RTC library has days 1 to 7, with 1 = Sunday and 7 = Saturday                                          ***
+*** NTP library is https://github.com/SensorsIot/NTPtimeESP                                                    *** 
+*** Real Time Clock library is Adafruit 2.1.3 for RTC like DS3231                                              ***
+******************************************************************************************************************/
+
 
 #include <NTPtimeESP.h>
-#include <RTClib.h>                    // Adafruit 2.1.3 for RTC like DS3231
-#include <Adafruit_GFX.h>              //  Adafruit 1.11.9
-#include <Adafruit_SSD1306.h>          //  Adafruit 2.5.9
+#include <RTClib.h>            // Adafruit 2.1.3 for RTC like DS3231
+#include <Adafruit_GFX.h>      //  Adafruit 1.11.9
+#include <Adafruit_SSD1306.h>  //  Adafruit 2.5.9
+
 const char* ssid = "*******";                                                 // SSID of your Wifi network
 const char* password = "******";                                              // Password of your wifi network
-RTC_DS3231 rtc;                                                                 // create an instance of the real time clock
+RTC_DS3231 rtc;                        // create an instance of the real time clock
 //OLED Display
-#define SCREEN_WIDTH 128                                                        // OLED display width, in pixels
-#define SCREEN_HEIGHT 64                                                        // OLED display height, in pixels
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);               // create an instance of the SSD1306
-const char* weekDays[] = { "Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat" }; // weekDays[0] = "Sun",  weekDays[6] = "Sat"
+#define SCREEN_WIDTH 128                                                         // OLED display width, in pixels
+#define SCREEN_HEIGHT 64                                                         // OLED display height, in pixels
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);                // create an instance of the SSD1306
+const char* weekDays[] = { "Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat" };  //RTC weekDays[0] = "Sun",  weekDays[6] = "Sat"
 //NTP Server:
 const char* NTP_Server = "uk.pool.ntp.org";  // pick an ntp server in your area
 NTPtime NTPch(NTP_Server);                   //make an instance of an NTP server to work with
 strDateTime NTPdateTime;                     //strDateTime is declared in NTPtimeESP.h as a type
 int failCount = 60;                          // maximun number of times to attempt to connect to wi-fi. Attempts are 500Ms appart
 int BAUDRATE = 9600;
-#define DST_OFFSET 0     //  1 for European summer time; 2 for US daylight saving time; 0 for no DST adjustment;
-#define TIME_ZONE +0.0f  // used in NTP time calculation. UTC time zone difference in regards to UTC (floating point number)
+#define DST_OFFSET 0      //  1 for European summer time; 2 for US daylight saving time; 0 for no DST adjustment;
+#define TIME_ZONE +0.0f   // used in NTP time calculation. UTC time zone difference in regards to UTC (floating point number)
 #define SCREEN_WIDTH 128  // OLED display width, in pixels
 #define SCREEN_HEIGHT 64  // OLED display height, in pixels
 
@@ -57,7 +59,7 @@ char* serialPadZero(int aNumber) {
   } else {
     Serial.print(aNumber);
   }
-  return strdup("") ;
+  return strdup("");
 }
 /********************************************************************************************
 *** displayPadZero - print a "0" in front of a single digit number OLED display           ***
@@ -71,11 +73,13 @@ char* displayPadZero(int aNumber) {
   } else {
     display.print(aNumber);
   }
-    return strdup("") ;
+  return strdup("");
 }
-/********************************************
-***    Initialse and connect to Wi-Fi     ***
-*********************************************/
+
+/******************************************************************************************************************************
+***                             Initialse and connect to Wi-Fi                                                              ***
+*******************************************************************************************************************************/
+
 void initialiseWiFi() {  // will attempt to connect to the local router/hub
   int attempts = 0;
   WiFi.mode(WIFI_OFF);  //Prevents reconnection issue (taking too long to connect)
@@ -106,11 +110,11 @@ void initialiseWiFi() {  // will attempt to connect to the local router/hub
   Serial.print("- IP address: ");
   Serial.println(WiFi.localIP());
 }
-/********************************
-***    Initialse the OLED     ***
-*********************************/
+/***************************************************************************************
+***                          Initialse the OLED                                      ***
+****************************************************************************************/
 void initialiseDisplay() {
-  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {  // Address found in I2C_Scanner.ino = 0x3C 
+  if (!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {  // Address found in I2C_Scanner.ino = 0x3C
     Serial.println("SSD1306 allocation failed");     // if the display isn't found you can't write an error message on it
   } else {
     display.clearDisplay();
@@ -122,12 +126,13 @@ void initialiseDisplay() {
 }
 /***************************************************************************************
 ***  This is the data I want to see all the time.                                    ***
-***  1st line shows ssid, 2nd line shows I.P address,and 3rd line shows current time ***
+***  1st line shows ssid, 2nd I.P address, 3rd current time (with slight delay)      ***
 ****************************************************************************************/
- void mainScreen() {
-   DateTime now = rtc.now();
+void mainScreen() {
+  DateTime now = rtc.now();
   display.clearDisplay();  // connected at this point
   display.setCursor(0, 10);
+  display.println(ssid);
   display.println(WiFi.localIP());
   display.print("Time is ");
   displayPadZero(now.hour());
@@ -136,7 +141,7 @@ void initialiseDisplay() {
   display.print(':');
   displayPadZero(now.second());
   display.println();
-   display.display();
+  display.display();
 }
 /******************************************************************
 *** Show, on the serial port monitor, the NTP date and time     ***
@@ -181,9 +186,9 @@ void serialShowDateTimeRTC(DateTime rtcDateTime) {
   Serial.print(":");
   Serial.println(serialPadZero(rtcDateTime.second()));
 }
-/*****************************************
-*** Update the RTC from the NTP server ***
-******************************************/
+/******************************************************************
+***          Update the RTC from the NTP server                 ***
+*******************************************************************/
 void updateRTC() {
   do {
     NTPdateTime = NTPch.getNTPtime(TIME_ZONE, DST_OFFSET);  //1 for European summer time; 2 for US daylight saving time; 0 for no DST adjustment; ( not tested by me)
@@ -195,9 +200,9 @@ void updateRTC() {
   rtc.adjust(DateTime(NTPdateTime.year, NTPdateTime.month, NTPdateTime.day, NTPdateTime.hour, NTPdateTime.minute, NTPdateTime.second));
   serialShowDateTimeNTP(NTPdateTime);
 }
-/*****************************************
-*** Initialise the RTC from the NTP server ***
-******************************************/
+/******************************************************************
+***   Initialise the RTC and update it from the NTP server      ***
+*******************************************************************/
 void initialiseRTC() {
   if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");

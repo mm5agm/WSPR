@@ -1,34 +1,35 @@
-/* 
-Author Colin Campbell MM5AGM
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+/*****************************************************************************************************************
+***                                 Author Colin Campbell MM5AGM mm5agm@outlook.com                            ***                                                                                                            ***
+*** This program is free software: you can redistribute it and/or modify it under the terms of the GNU         ***
+*** General Public License as published by the Free Software Foundation, either version 3 of the License,      ***
+*** or (at your option) any later version.                                                                     ***
+***                                                                                                            ***
+*** This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without          ***
+*** even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                          ***
+*** See the GNU General Public License for more details.                                                       ***
+******************************************************************************************************************/
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-*/
-/* This is the third of a series of programs that culminate in a WSPR beacon transmitter.
- Hardware required = ESP32 and Real Time Clock DS3231
- Each program builds on the previous one by adding 1 component or more code.
- This program gets the date and time from an NTP server and uses this to update
- a real time clock. Output is formatted date and time to the serial monitor.
- Unfortuneately the 2 libraries I use to get time define time differently.
- The NTP library has days 0 to 6, with 0 = Sunday and 6 = Saturday
- The RTC library has days 1 to 7, with 1 = Sunday and 7 = Saturday
- NTP library is https://github.com/SensorsIot/NTPtimeESP 
- Real Time Clock library is Adafruit 2.1.3 for RTC like DS3231
- The program shows date and time formatted from NTP and RTC
-*/
+/*****************************************************************************************************************
+*** This is the third of a series of programs that culminate in a WSPR beacon transmitter. Each program builds ***
+*** on the previous one by adding 1 component or more code. This program gets the date and time from an NTP    ***
+*** server and uses this to update a real time clock. Output is formatted date and time to the serial monitor. ***
+*** Unfortuneately the 2 libraries I use to get time define time differently. The program shows date and time  ***
+*** formatted from NTP and RTC.                                                                                ***
+*** Note that because of the delay(1000) in loop() the time displayed is slightly behind                       ***                                                                              ***
+*** The NTP library has days 0 to 6, with 0 = Sunday and 6 = Saturday                                          ***
+*** The RTC library has days 1 to 7, with 1 = Sunday and 7 = Saturday                                          ***
+*** NTP library is https://github.com/SensorsIot/NTPtimeESP                                                    ***
+*** Real Time Clock library is Adafruit 2.1.3 for RTC like DS3231                                              ***
+*** Hardware required = ESP32 and Real Time Clock DS3231                                                       ***
+******************************************************************************************************************/
 
-#include <NTPtimeESP.h>                // https://github.com/SensorsIot/NTPtimeESP 
-#include <RTClib.h>                    // Adafruit 2.1.3 for RTC like DS3231
+#include <NTPtimeESP.h>  // https://github.com/SensorsIot/NTPtimeESP
+#include <RTClib.h>      // Adafruit 2.1.3 for RTC like DS3231
 
-const char* ssid = "*******";          // SSID of your Wifi network
-const char* password = "******";       // Password of your wifi network
+const char* ssid = "*******";                                                    // SSID of your Wifi network
+const char* password = "******";                                                 // Password of your wifi network
 RTC_DS3231 rtc;                                                                  // create an instance of the real time clock
-const char* weekDays[] = { "Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat" };  // weekDays[0] = "Sun",  weekDays[6] = "Sat"
+const char* weekDays[] = { "Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat" };  // RTC weekDays[0] = "Sun", weekDays[6] = "Sat"
 //NTP Server:
 const char* NTP_Server = "uk.pool.ntp.org";  // pick an ntp server in your area
 NTPtime NTPch(NTP_Server);                   //make an instance of an NTP server to work with
@@ -50,11 +51,12 @@ char* padZero(int aNumber) {
   } else {
     Serial.print(aNumber);
   }
-  return strdup("") ;
+  return strdup("");
 }
-/********************************************
-***    Initialse and connect to Wi-Fi     ***
-*********************************************/
+
+/******************************************************************************************************************************
+***                             Initialse and connect to Wi-Fi                                                              ***
+*******************************************************************************************************************************/
 void initialiseWiFi() {  // will attempt to connect to the local router/hub
   int attempts = 0;
   WiFi.mode(WIFI_OFF);  //Prevents reconnection issue (taking too long to connect)
@@ -142,9 +144,9 @@ void updateRTC() {
   rtc.adjust(DateTime(NTPdateTime.year, NTPdateTime.month, NTPdateTime.day, NTPdateTime.hour, NTPdateTime.minute, NTPdateTime.second));
   serialShowDateTimeNTP(NTPdateTime);
 }
-/*****************************************
+/*********************************************
 *** Initialise the RTC from the NTP server ***
-******************************************/
+**********************************************/
 void initialiseRTC() {
   if (!rtc.begin()) {
     Serial.println("Couldn't find RTC");

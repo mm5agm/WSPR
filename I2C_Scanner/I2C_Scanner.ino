@@ -1,20 +1,20 @@
-/* 
-Author Colin Campbell MM5AGM
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+/*****************************************************************************************************************
+***                                 Author Colin Campbell MM5AGM mm5agm@outlook.com                            ***                                                                                                            ***
+*** This program is free software: you can redistribute it and/or modify it under the terms of the GNU         ***
+*** General Public License as published by the Free Software Foundation, either version 3 of the License,      ***
+*** or (at your option) any later version.                                                                     ***
+***                                                                                                            ***
+*** This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without          ***
+*** even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                          ***
+*** See the GNU General Public License for more details.                                                       ***
+******************************************************************************************************************/
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-See the GNU General Public License for more details.
-*/
-/* This is the second of a series of programs that culminate in a WSPR beacon transmitter.
- Hardware required = ESP32 and Real Time Clock DS3231
- Each program builds on the previous one by adding 1 component or more code.
- This program gets the I2C addess of the RTC and reports what's found to the serial monitor.
-*/
+/*****************************************************************************************************************
+*** This is the second of a series of programs that culminates in a WSPR beacon transmitter. Each program      ***
+*** builds on the previous one by adding 1 component or more code. This program scans the I2C bus and reports  ***
+*** the addresses, hexadecimal, of any devices found.                                                          ***
+*** Hardware required = ESP32                                                                                  ***
+******************************************************************************************************************/
 
 #include <Wire.h>
 
