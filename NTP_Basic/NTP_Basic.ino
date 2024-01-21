@@ -18,7 +18,6 @@
 *** you query more often than every 4 seconds you risk being banned from that server.                          ***
 *** Hardware required = ESP32                                                                                  ***
 ******************************************************************************************************************/
-
 #include <NTPtimeESP.h>
 
 const char* NTP_Server = "uk.pool.ntp.org";  // pick an ntp server in your area
