@@ -8,6 +8,7 @@
 *** even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                          ***
 *** See the GNU General Public License for more details.                                                       ***
 ******************************************************************************************************************/
+
 /*****************************************************************************************************************
 *** This is the first of a series of programs that culminates in a WSPR beacon transmitter. Each program       ***
 *** builds on the previous one by adding 1 component or more code. This program gets the date and time from    ***
