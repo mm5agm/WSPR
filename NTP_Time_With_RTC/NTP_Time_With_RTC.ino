@@ -39,7 +39,7 @@ int BAUDRATE = 9600;
 #define DST_OFFSET 0     //  1 for European summer time; 2 for US daylight saving time; 0 for no DST adjustment;
 #define TIME_ZONE +0.0f  // used in NTP time calculation. UTC time zone difference in regards to UTC (floating point number)
 
-/************************** [ padZero ] ******************************************
+/************************** [ padZero ] ************************************************
 *** Print a "0" in front of a single digit number in the Serial Monitor Output       ***
 ****************************************************************************************/
 void padZero(int aNumber) {
