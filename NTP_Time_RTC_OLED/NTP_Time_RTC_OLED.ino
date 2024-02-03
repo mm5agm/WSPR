@@ -205,9 +205,7 @@ void updateRTC() {
     NTPdateTime = NTPch.getNTPtime(TIME_ZONE, DST_OFFSET);  //1 for European summer time; 2 for US daylight saving time; 0 for no DST adjustment; ( not tested by me)
     delay(1);
   } while (!NTPdateTime.valid);  // keep trying till you get a valid time
-                                 // setTime is from the <TimeLib.h> library
-                                 // setTime(NTPdateTime.hour, NTPdateTime.minute, NTPdateTime.second, NTPdateTime.day, NTPdateTime.month, NTPdateTime.year);  // sets the systemtime to the time returned from NTP
-                                 // rtc.adjust comes from the adafruit rtc lib
+  // rtc.adjust comes from the adafruit rtc lib
   rtc.adjust(DateTime(NTPdateTime.year, NTPdateTime.month, NTPdateTime.day, NTPdateTime.hour, NTPdateTime.minute, NTPdateTime.second));
   serialShowDateTimeNTP(NTPdateTime);
 }
