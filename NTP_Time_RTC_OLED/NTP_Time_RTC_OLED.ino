@@ -1,5 +1,5 @@
 /*****************************************************************************************************************
-***                                 Author Colin Campbell MM5AGM mm5agm@outlook.com                            ***                                                                                                            ***
+***                                 Author Colin Campbell MM5AGM mm5agm@outlook.co                             ***
 *** This program is free software: you can redistribute it and/or modify it under the terms of the GNU         ***
 *** General Public License as published by the Free Software Foundation, either version 3 of the License,      ***
 *** or (at your option) any later version.                                                                     ***
@@ -8,6 +8,7 @@
 *** even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                          ***
 *** See the GNU General Public License for more details.                                                       ***
 ******************************************************************************************************************/
+
 /*****************************************************************************************************************
 *** This is the fourth in a series of programs that culminates in a WSPR beacon transmitter. Each program      ***
 *** builds on the previous one by adding 1 component or more code. This program gets the date and time from an ***
@@ -16,7 +17,7 @@
 *** Unfortuneately the 2 libraries I use to get time define time differently. The RTC is updated every         ***
 *** 2 minutes from the NTP server                                                                              ***
 *** The NTP library has days 0 to 6, with 0 = Sunday and 6 = Saturday                                          ***
-*** The RTC library has days 1 to 7, with 1 = Sunday and 7 = Saturday                                          ***
+*** The Time library has days 1 to 7, with 1 = Sunday and 7 = Saturday                                         ***
 *** NTP library is https://github.com/SensorsIot/NTPtimeESP                                                    *** 
 *** Real Time Clock library is Adafruit 2.1.3 for RTC like DS3231                                              ***
 ******************************************************************************************************************/
