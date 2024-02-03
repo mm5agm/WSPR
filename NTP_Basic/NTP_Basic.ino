@@ -1,5 +1,5 @@
 /*****************************************************************************************************************
-***                                 Author Colin Campbell MM5AGM mm5agm@outlook.com                            ***                                                                                                            ***
+***                                 Author Colin Campbell MM5AGM mm5agm@outlook.co                             ***
 *** This program is free software: you can redistribute it and/or modify it under the terms of the GNU         ***
 *** General Public License as published by the Free Software Foundation, either version 3 of the License,      ***
 *** or (at your option) any later version.                                                                     ***
@@ -12,11 +12,13 @@
 /*****************************************************************************************************************
 *** This is the first of a series of programs that culminates in a WSPR beacon transmitter. Each program       ***
 *** builds on the previous one by adding 1 component or more code. This program gets the date and time from    ***
-** an NTP server using Wi-Fi. There is no formatting of the date and time, that will be done in a later        ***
+*** an NTP server using Wi-Fi. There is no formatting of the date and time, that will be done in a later       ***
 *** program. The NTP library is https://github.com/SensorsIot/NTPtimeESP  NTP servers allow you to get the     ***
 *** time approximately every 4 seconds but once a day to update a real time clock should be sufficient. If     ***
-*** you query more often than every 4 seconds you risk being banned from that server.                          ***
+*** you query more often than every 4 seconds you risk being banned from that server. I query every 7 minutes. ***
 *** Hardware required = ESP32                                                                                  ***
+*** In the Arduino IDE, in File/Preferences, fill in the “Additional boards manager URLs” with                 ***
+***                 https://espressif.github.io/arduino-esp32/package_esp32_index.json                         ***
 ******************************************************************************************************************/
 #include <NTPtimeESP.h>
 
