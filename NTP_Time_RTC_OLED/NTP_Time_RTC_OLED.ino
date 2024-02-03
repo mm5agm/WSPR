@@ -49,8 +49,6 @@ int BAUDRATE = 9600;
 
 /**************************************************************************************************
 *** serialPadZero - print a "0" in front of a single digit number in the Serial Monitor Output  ***
-*** As I want to use this inside other functions, I can't declare it as "void" so I             ***
-*** declare it as returning a pointer to a character and send back ""                           ***
 ***************************************************************************************************/
 void serialPadZero(int aNumber) {
   if (aNumber < 10) {
