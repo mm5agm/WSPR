@@ -1,5 +1,5 @@
 /*****************************************************************************************************************
-***                                 Author Colin Campbell MM5AGM mm5agm@outlook.com                            ***
+***                                 Author Colin Campbell MM5AGM mm5agm@outlook.com                            ***                                                                                                            ***
 *** This program is free software: you can redistribute it and/or modify it under the terms of the GNU         ***
 *** General Public License as published by the Free Software Foundation, either version 3 of the License,      ***
 *** or (at your option) any later version.                                                                     ***
@@ -44,7 +44,7 @@ void loop() {
 
   Serial.println("Scanning...");
   numDevices = 0;
-  for (address = 8; address < 120; address++) {  // valid I2C addresses are from 8 to 119
+  for (address = startAddress; address <= endAddress ; address++) {  // valid I2C addresses are from 8 to 119
     Wire.beginTransmission(address);
     error = Wire.endTransmission();
     if (error == 0) {
