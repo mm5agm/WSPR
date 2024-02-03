@@ -1,5 +1,5 @@
 /*****************************************************************************************************************
-***                                 Author Colin Campbell MM5AGM mm5agm@outlook.co                             ***
+***                                 Author Colin Campbell MM5AGM mm5agm@outlook.com                            ***
 *** This program is free software: you can redistribute it and/or modify it under the terms of the GNU         ***
 *** General Public License as published by the Free Software Foundation, either version 3 of the License,      ***
 *** or (at your option) any later version.                                                                     ***
@@ -16,7 +16,7 @@
 *** the displayed time will be slightly behind the real time because of the delay(1000) in the loop()          ***
 *** Unfortuneately the 2 libraries I use to get time define time differently. The RTC is updated every         ***
 *** 2 minutes from the NTP server                                                                              ***
-*** The NTP library has days 0 to 6, with 0 = Sunday and 6 = Saturday                                          ***
+*** The RTC library has days 0 to 6, with 0 = Sunday and 6 = Saturday                                          ***
 *** The Time library has days 1 to 7, with 1 = Sunday and 7 = Saturday                                         ***
 *** NTP library is https://github.com/SensorsIot/NTPtimeESP                                                    *** 
 *** Real Time Clock library is Adafruit 2.1.3 for RTC like DS3231                                              ***
@@ -28,9 +28,9 @@
 #include <Adafruit_GFX.h>      //  Adafruit 1.11.9
 #include <Adafruit_SSD1306.h>  //  Adafruit 2.5.9
 
-const char* ssid = "*******";                                                 // SSID of your Wifi network
-const char* password = "******";                                              // Password of your wifi network
-RTC_DS3231 rtc;                        // create an instance of the real time clock
+const char* ssid = "*******";     // SSID of your Wifi network
+const char* password = "******";  // Password of your wifi network
+RTC_DS3231 rtc;                   // create an instance of the real time clock
 //OLED Display
 #define SCREEN_WIDTH 128                                                         // OLED display width, in pixels
 #define SCREEN_HEIGHT 64                                                         // OLED display height, in pixels
@@ -52,28 +52,26 @@ int BAUDRATE = 9600;
 *** As I want to use this inside other functions, I can't declare it as "void" so I             ***
 *** declare it as returning a pointer to a character and send back ""                           ***
 ***************************************************************************************************/
-char* serialPadZero(int aNumber) {
+void serialPadZero(int aNumber) {
   if (aNumber < 10) {
     Serial.print("0");
     Serial.print(aNumber);
   } else {
     Serial.print(aNumber);
   }
-  return strdup("");
 }
 /********************************************************************************************
 *** displayPadZero - print a "0" in front of a single digit number OLED display           ***
 *** As I want to use this inside other functions, I can't declare it as "void" so I       ***
 *** declare it as returning a pointer to a character and send back ""                     ***
 *********************************************************************************************/
-char* displayPadZero(int aNumber) {
+void displayPadZero(int aNumber) {
   if (aNumber < 10) {
     display.print("0");
     display.print(aNumber);
   } else {
     display.print(aNumber);
   }
-  return strdup("");
 }
 
 /******************************************************************************************************************************
@@ -149,20 +147,27 @@ void mainScreen() {
 *** different functions to print                                ***
 *******************************************************************/
 void serialShowDateTimeNTP(strDateTime ntpDateTime) {
+ int i;
   Serial.print("  NTP queried - ");
   Serial.print(weekDays[ntpDateTime.dayofWeek - 1]);  //NTP library has days 1 to 7,  Sunday to Saturday
   Serial.print("  ");
-  Serial.print(serialPadZero(ntpDateTime.day));
+  i = ntpDateTime.day;
+  serialPadZero(i);
   Serial.print("/");
-  Serial.print(serialPadZero(ntpDateTime.month));
+  i = ntpDateTime.month;
+  serialPadZero(i);
   Serial.print("/");
-  Serial.print(serialPadZero(ntpDateTime.year));
+  i = ntpDateTime.year;
+  serialPadZero(i);
   Serial.print("  ");
-  Serial.print(serialPadZero(ntpDateTime.hour));
+  i = ntpDateTime.hour;
+  serialPadZero(i);
   Serial.print(":");
-  Serial.print(serialPadZero(ntpDateTime.minute));
+  i = ntpDateTime.minute;
+  serialPadZero(i);
   Serial.print(":");
-  Serial.print(serialPadZero(ntpDateTime.second));
+  i = ntpDateTime.second;
+  serialPadZero(i);
   Serial.print("   ");
 }
 /******************************************************************
@@ -171,20 +176,28 @@ void serialShowDateTimeNTP(strDateTime ntpDateTime) {
 *** different functions to print                                ***
 *******************************************************************/
 void serialShowDateTimeRTC(DateTime rtcDateTime) {
+  int i;
   Serial.print("RTC - ");
   Serial.print(weekDays[rtcDateTime.dayOfTheWeek()]);  //RTC library has days 0 to 6 Sunday to Saturday
   Serial.print("  ");
-  Serial.print(serialPadZero(rtcDateTime.day()));
+  i = rtcDateTime.day();
+  serialPadZero(i);
   Serial.print("/");
-  Serial.print(serialPadZero(rtcDateTime.month()));
+  i = rtcDateTime.month();
+  serialPadZero(i);
   Serial.print("/");
-  Serial.print(serialPadZero(rtcDateTime.year()));
+  i = rtcDateTime.year();
+  serialPadZero(i);
   Serial.print("  ");
-  Serial.print(serialPadZero(rtcDateTime.hour()));
+  i = rtcDateTime.hour();
+  serialPadZero(i);
   Serial.print(":");
-  Serial.print(serialPadZero(rtcDateTime.minute()));
+  i = rtcDateTime.minute();
+  serialPadZero(i);
   Serial.print(":");
-  Serial.println(serialPadZero(rtcDateTime.second()));
+  i = rtcDateTime.second();
+  serialPadZero(i);
+  Serial.println();
 }
 /******************************************************************
 ***          Update the RTC from the NTP server                 ***

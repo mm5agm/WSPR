@@ -1,5 +1,5 @@
 /*****************************************************************************************************************
-***                                 Author Colin Campbell MM5AGM mm5agm@outlook.co                             ***
+***                                 Author Colin Campbell MM5AGM mm5agm@outlook.com                            ***
 *** This program is free software: you can redistribute it and/or modify it under the terms of the GNU         ***
 *** General Public License as published by the Free Software Foundation, either version 3 of the License,      ***
 *** or (at your option) any later version.                                                                     ***
@@ -39,19 +39,16 @@ int BAUDRATE = 9600;
 #define DST_OFFSET 0     //  1 for European summer time; 2 for US daylight saving time; 0 for no DST adjustment;
 #define TIME_ZONE +0.0f  // used in NTP time calculation. UTC time zone difference in regards to UTC (floating point number)
 
-/********************************************************************************************
-*** padZero - print a "0" in front of a single digit number in the Serial Monitor Output  ***
-*** As I want to use this inside other functions, I can't declare it as "void" so I       ***
-*** declare it as returning a pointer to a character and send back ""                                 ***
-*********************************************************************************************/
-char* padZero(int aNumber) {
+/************************** [ padZero ] ******************************************
+*** Print a "0" in front of a single digit number in the Serial Monitor Output       ***
+****************************************************************************************/
+void padZero(int aNumber) {
   if (aNumber < 10) {
     Serial.print("0");
     Serial.print(aNumber);
   } else {
     Serial.print(aNumber);
   }
-  return strdup("");
 }
 
 /******************************************************************************************************************************
@@ -87,26 +84,33 @@ void initialiseWiFi() {  // will attempt to connect to the local router/hub
   Serial.print("- IP address: ");
   Serial.println(WiFi.localIP());
 }
-/******************************************************************
-*** Show, on the serial port monitor, the NTP date and time     ***
-*** NTP and RTC use a different definition of time so need      ***
-*** different functions to print                                ***
-*******************************************************************/
+/*************************************************************************
+*** Show, on the serial port monitor, the NTP date and time            ***
+*** RTC and Time (NTP) use a different definition of time so need      ***
+*** different functions to print                                       ***
+**************************************************************************/
 void serialShowDateTimeNTP(strDateTime ntpDateTime) {
+  int i;
   Serial.print("  NTP queried - ");
   Serial.print(weekDays[ntpDateTime.dayofWeek - 1]);  //NTP library has days 1 to 7,  Sunday to Saturday
   Serial.print("  ");
-  Serial.print(padZero(ntpDateTime.day));
+  i = ntpDateTime.day;
+  padZero(i);
   Serial.print("/");
-  Serial.print(padZero(ntpDateTime.month));
+  i = ntpDateTime.month;
+  padZero(i);
   Serial.print("/");
-  Serial.print(padZero(ntpDateTime.year));
+  i = ntpDateTime.year;
+  padZero(i);
   Serial.print("  ");
-  Serial.print(padZero(ntpDateTime.hour));
+  i = ntpDateTime.hour;
+  padZero(i);
   Serial.print(":");
-  Serial.print(padZero(ntpDateTime.minute));
+  i = ntpDateTime.minute;
+  padZero(i);
   Serial.print(":");
-  Serial.print(padZero(ntpDateTime.second));
+  i = ntpDateTime.second;
+  padZero(i);
   Serial.print("   ");
 }
 /******************************************************************
@@ -115,20 +119,28 @@ void serialShowDateTimeNTP(strDateTime ntpDateTime) {
 *** different functions to print                                ***
 *******************************************************************/
 void serialShowDateTimeRTC(DateTime rtcDateTime) {
+  int i;
   Serial.print("RTC - ");
   Serial.print(weekDays[rtcDateTime.dayOfTheWeek()]);  //RTC library has days 0 to 6 Sunday to Saturday
   Serial.print("  ");
-  Serial.print(padZero(rtcDateTime.day()));
+  i = rtcDateTime.day();
+  padZero(i);
   Serial.print("/");
-  Serial.print(padZero(rtcDateTime.month()));
+  i = rtcDateTime.month();
+  padZero(i);
   Serial.print("/");
-  Serial.print(padZero(rtcDateTime.year()));
+  i = rtcDateTime.year();
+  padZero(i);
   Serial.print("  ");
-  Serial.print(padZero(rtcDateTime.hour()));
+  i = rtcDateTime.hour();
+  padZero(i);
   Serial.print(":");
-  Serial.print(padZero(rtcDateTime.minute()));
+  i = rtcDateTime.minute();
+  padZero(i);
   Serial.print(":");
-  Serial.println(padZero(rtcDateTime.second()));
+  i = rtcDateTime.second();
+  padZero(i);
+  Serial.println();
 }
 /*****************************************
 *** Update the RTC from the NTP server ***
