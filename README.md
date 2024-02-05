@@ -1,5 +1,5 @@
-These programs/sketches are from the article "A beginners guide to the Arduino IDE culminating in a single band WSPR beacon" in Practical Wireless, a UK magazine. Publication date to be advised.
-Practical Wireless hold the copyright to the printed article and with their permission it will be put here after publication as well.
+These programs/sketches are from the article "A beginners guide to the Arduino IDE culminating in a single band WSPR beacon" in Practical Wireless, a UK magazine. Publication date is the May issue of PW (out early April) - it will probably run to two, maybe three articles.
+Practical Wireless hold the copyright to the printed article and with their permission it will be printed here after publication.
 
 ![Fig 1  Block Diagram](https://github.com/mm5agm/WSPR/assets/26571503/d4f9af83-ccb1-496f-a32a-023caceaa8cf)
 
@@ -12,5 +12,5 @@ If you run the sketches in order you will be able to see how each component work
 6) Display information on OLED                                      - NTP_Time_RTC_OLED.ino
 7) Add si5351 square wave generator - calibrate using Examples/Etherkit Si5351/si5351_calibration.ino in the Arduino IDE. I changed target_freq on line 32 from 1000000000ULL to 10140200000ULL and used WSJT-X in WSPR mode on 30mtrs to see where my signal was.
 8) Add low pass filter for the band you are using.
-9) Load WSPR_Single_Band (not on github yet ) leave randomChange at 0 until you're sure that you TX is within the WSPR range.
+9) Load WSPR_Single_Band. Leave randomChange at 0 until you're sure that you TX is within the WSPR range. This program is still work in progress so will change over time. I'm currently investigating how to reduce drift.
     
