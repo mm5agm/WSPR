@@ -15,7 +15,10 @@
 *** server and uses this to update a real time clock. Output is formatted date and time to the serial monitor. ***
 *** Unfortuneately the 2 libraries I use to get time define time differently. The program shows date and time  ***
 *** formatted from NTP and RTC.                                                                                ***
-*** Note that because of the delay(1000) in loop() the time displayed is slightly behind                       ***
+*** The NTP library is https://github.com/SensorsIot/NTPtimeESP  NTP servers allow you to get the              ***
+*** time approximately every 4 seconds. If you query more often than every 4 seconds you risk being banned     ***
+*** from that server. The library used to get the time returns the number of seconds since 1st January 1970.   ***
+*** This means that the time that's reported can be up to 1 second out.                                        ***
 *** The RTC library has days 0 to 6, with 0 = Sunday and 6 = Saturday                                          ***
 *** The NTP library has days 1 to 7, with 1 = Sunday and 7 = Saturday                                         ***
 *** NTP library is https://github.com/SensorsIot/NTPtimeESP                                                    ***

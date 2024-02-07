@@ -14,6 +14,10 @@
 *** builds on the previous one by adding 1 component or more code. This program gets the date and time from an ***
 *** NTP server and updates a real time clock. The OLED display, and Serial Monitor show the results. Note that ***
 *** the displayed time will be slightly behind the real time because of the delay(1000) in the loop()          ***
+*** The NTP library is https://github.com/SensorsIot/NTPtimeESP  NTP servers allow you to get the              ***
+*** time approximately every 4 seconds. If you query more often than every 4 seconds you risk being banned     ***
+*** from that server. The library used to get the time returns the number of seconds since 1st January 1970.   ***
+*** This means that the time that's reported can be up to 1 second out.                                        ***
 *** Unfortuneately the 2 libraries I use to get time define time differently. The RTC is updated every         ***
 *** 2 minutes from the NTP server                                                                              ***
 *** The RTC library has days 0 to 6, with 0 = Sunday and 6 = Saturday                                          ***

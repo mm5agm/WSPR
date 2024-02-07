@@ -14,8 +14,9 @@
 *** builds on the previous one by adding 1 component or more code. This program gets the date and time from    ***
 *** an NTP server using Wi-Fi. There is no formatting of the date and time, that will be done in a later       ***
 *** program. The NTP library is https://github.com/SensorsIot/NTPtimeESP  NTP servers allow you to get the     ***
-*** time approximately every 4 seconds but once a day to update a real time clock should be sufficient. If     ***
-*** you query more often than every 4 seconds you risk being banned from that server. I query every 7 minutes. ***
+*** time approximately every 4 seconds. If you query more often than every 4 seconds you risk being banned     ***
+*** from that server. The library used to get the time returns the number of seconds since 1st January 1970.   ***
+*** This means that the time that's reported can be up to 1 second out.                                        ***
 *** Hardware required = ESP32                                                                                  ***
 *** In the Arduino IDE, in File/Preferences, fill in the “Additional boards manager URLs” with                 ***
 ***                 https://espressif.github.io/arduino-esp32/package_esp32_index.json                         ***
