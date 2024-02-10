@@ -10,7 +10,7 @@
 ******************************************************************************************************************/
 /*****************************************************************************************************************
 ** This is the final sketch of a series that has culminated in this single band WSPR beacon transmitter.        **
-** It's a work in progress and may be changed. I'm currently trying different approches to reduce drift.        **
+** It's a work in progress and may be changed.                                                                  **
 ** You will need to change the ssid, password, callsign, locator, si5351 calibration factor, and select the     **
 ** frequency to TX. Change DST_OFFSET and TIME_ZONE if you want to display local time otherwise it's UTC        **        **                                                                                                              **
 ** Hardware required = ESP32, si5351 square wave generator, Real Time Clock DS3231, SSD1306 0.96inch OLED       **
@@ -82,7 +82,7 @@ char locator[5] = "****";     //  USER MAIDENHEAD GRID LOCATOR first 4 character
 // txPower is determined by si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA) + any amplification you add
 int txPower = 10;         // your actual TX power in dBm.
 int timeSlots = 6;        // number of slots to transmit in each hour. Allowed values 1,2,3,5,6,8,10 and 15 corresponding to 3.33% of the time 6.67%,10%,16.67%,20%,26.67%,33.33%,50%
-int randomChange = 0;     // 0 to 100.  a random value between -randomChange and +randomChange is applied to the TX frequency random(-100, 100)
+int randomChange = 75;    // 0 to 100.  a random value between -randomChange and +randomChange is applied to the TX frequency random(-100, 100)
 #define TONE_SPACING 146  // ~1.46 Hz
 #define WSPR_DELAY 683    // Delay value for WSPR
 #define WSPR_CTC 10672    // CTC value for WSPR
@@ -95,36 +95,29 @@ const char* ssid = "*****";              // SSID of your Wifi network
 const char* password = "*******";        // Password of your wifi network
 int failCount = 20;                      // maximun number of times to attempt to connect to wi-fi. Attempts are 500Ms appart
 const char* WiFi_hostname = "ESP_WSPR";  // how it's reported on your router/hub
-
 /******************************[ si5351 ]*******************************************************************************************/
-int32_t cal_factor = 0; //Calibration factor obtained from Calibration arduino program in Examples. You must calbrate first
-Si5351 si5351(0x60);          // si5351 instance. I've put I2C address in because sometimes it didn't seem to respond without it
-//bool warmUpRequired = true;   // Start to transmit a couple of seconds prior to the start of the even minute to warm up the si5351
-
+int32_t cal_factor = 8100;  //Calibration factor obtained from Calibration arduino program in Examples. You must calbrate first
+Si5351 si5351(0x60);        // si5351 instance. I've put I2C address in because sometimes it didn't seem to respond without it
 /******************************[ OLED Display ]**************************************************************************************/
 int SCREEN_WIDTH = 128;                                            // OLED display width, in pixels
 int SCREEN_HEIGHT = 64;                                            // OLED display height, in pixels
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);  // create an instance of Adafruit_SSD1306 called display
-
 /************************************************* RTC ************************************************************************/
 RTC_DS3231 rtc;
 const char* weekDays[] = { "Sun", "Mon", "Tues", "Wed", "Thur", "Fri", "Sat" };  // Used for the display only
-
 /******************************[ NTP ]*****************************************************************************************/
 #define DST_OFFSET 0                         // 1 for European summer time; 2 for US daylight saving time; 0 for no DST adjustment;  not tested by me but since I'll use UTC only it can stay at 0)
 #define TIME_ZONE +0.0f                      // used in NTP time calculation. UTC time zone difference in regards to UTC (floating point number)
 const char* NTP_Server = "uk.pool.ntp.org";  // pick an ntp server in your area
 NTPtime NTPch(NTP_Server);
 strDateTime NTPdateTime;  //strDateTime is declared in NTPtimeESP.h as a type - don't confuse with DateTime declared in RTClib
-
 /*****************************[ Other Global Variables]*******************************/
-#define BAUDRATE 115200                      // Arduino serial monitor
-//const unsigned long idleFreq = 150000000UL;  // 150MHz. Used by clk1, when clk0 not transmitting, to keep heat in chip to help cut drift - maybe??
+#define BAUDRATE 115200  // Arduino serial monitor
 // WSPR TX frequency = dial + 1500Hz Uncomment only 1, the one you are using
 //const unsigned long freq =  28126100UL;  // 10Mtrs
 //const unsigned long freq =  24926100UL;  // 12Mtrs
 //const unsigned long freq =  21096100UL;  // 15Mtrs
-//const unsigned long freq =  18106100UL;  // 17Mtrs
+const unsigned long freq = 18106100UL;  // 17Mtrs
 //const unsigned long freq =  14097100UL;  // 20Mtrs
 //const unsigned long freq =  10140200UL;  // 30Mtrs
 //const unsigned long freq =   7040100UL;  // 40Mtrs
@@ -262,13 +255,10 @@ void initialiseSI5351() {
   freqMHz = txFreq / 1000000.0;                  // used to give the user a meaningful displayed frequency. If you divide with an integer, it only returns the quotient as an integer
   si5351.set_freq((txFreq * 100), SI5351_CLK0);  // Clock 0 used to tx WSPR
   si5351.set_pll(SI5351_PLL_FIXED, SI5351_PLLA);
-// si5351.set_freq(idleFreq * 100, SI5351_CLK1);  // Clock 1 used to keep heat in chip while not transmitting WSPR
   // If you change the drive strength to another value you will need to change the txPower value at line 76
   si5351.drive_strength(SI5351_CLK0, SI5351_DRIVE_8MA);  // 2,4,6,8mA  2 mA roughly corresponds to 3 dBm output,8 mA is approximately 10 dBm
-  //si5351.drive_strength(SI5351_CLK1, SI5351_DRIVE_8MA);  // 2,4,6,8mA  2 mA roughly corresponds to 3 dBm output,8 mA is approximately 10 dBm
   si5351.set_clock_pwr(SI5351_CLK0, 0);                  // Disable the clock initially
- // si5351.set_clock_pwr(SI5351_CLK1, 0);                  // Disable the clock initially
- #ifdef DEBUG
+#ifdef DEBUG
   Serial.println("initialiseSI5351 finished");
 #endif
 }
@@ -277,7 +267,6 @@ void initialiseSI5351() {
 ***  Only used in debug. Show date and time in serial monitor                              ***
 **********************************************************************************************/
 void serialShowTime(DateTime now) {
-  // Serial.println();
   Serial.print(weekDays[now.dayOfTheWeek()]);
   Serial.print("  ");
   serialPadZero(now.day());
@@ -291,7 +280,6 @@ void serialShowTime(DateTime now) {
   serialPadZero(now.minute());
   Serial.print(":");
   serialPadZero(now.second());
-  // Serial.println();
 }
 
 /************************************ [ mainScreen ] *****************************************
@@ -413,8 +401,8 @@ void encode() {
     si5351.set_freq((txFreq * 100) + (tx_buffer[i] * TONE_SPACING), SI5351_CLK0);
     delay(WSPR_DELAY);
   }
- // si5351.set_clock_pwr(SI5351_CLK0, 0);  // Finished TX so Turn off the output
-  digitalWrite(LED_BUILTIN, LOW);        // tx off
+  // si5351.set_clock_pwr(SI5351_CLK0, 0);  // Finished TX so Turn off the output
+  digitalWrite(LED_BUILTIN, LOW);  // tx off
 #ifdef DEBUG
   Serial.println("*** Encode Out ***");
 #endif
@@ -458,35 +446,23 @@ int txDelay(int numSlots) {
   return numMinutes;
 }
 
-/***************************** [ txOn ] *********************************************
-*** I read that, to stop drift, you should have a clock enabled all the time.     ***
-*** That's this code. It's commented out in this version because I don't think it ***
-*** worked. Before that, I also read that switching on TX a couple of             ***
-*** seconds before transmitting the encoded WSPR stopped drift - it didn't, so    ***
-*** I removed that code and now trying this. Switching between clock0 and clock1  ***
-*** with clock1 frequency at 150MHz                                               ***
-*** At txOn set clock0 on at the tx frequency, clock1 off                         ***                
-*** I'm still to be convinced that this works so checking results for each method.***
-*************************************************************************************/
+/***************************** [ txOn ] ***********************************************
+*** Neither switching TX on a couple of seconds early or having clock1 running at   ***
+*** 150MHz when clock0 wasn't transmitting made any difference to my drift problem. ***
+*** My drift problems were solved by using another si5351                           ***
+**************************************************************************************/
 void txOn() {
   txFreq = freq + random(-randomChange, randomChange);
   freqMHz = txFreq / 1000000.0;
-  //  si5351.set_freq((freq + random(-randomChange, randomChange)) * 100, SI5351_CLK0);
   si5351.set_freq((txFreq * 100), SI5351_CLK0);
- // si5351.set_clock_pwr(SI5351_CLK1, 0);  // switch off 150MHz tone on clock 1
   si5351.set_clock_pwr(SI5351_CLK0, 1);  // switch on clock0
 }
 
-/***************************** [ txOff ] *********************************************
-*** Comments as txOn                                                               ***
-*** At txOff set clock0 off, and clock1 to 150MHz                                  ***                
-*** and I'm still to be convinced that this works.                                 ***
-*************************************************************************************/
-
+/************* [ txOff ] ***************
+*** Switch clock0 off                ***
+****************************************/
 void txOff() {
-  si5351.set_clock_pwr(SI5351_CLK0, 0);          // stop transmitting. Switch off clock 0
- // si5351.set_freq(idleFreq * 100, SI5351_CLK1);  // Clock 1 used to keep heat in chip while not transmitting WSPR
- // si5351.set_clock_pwr(SI5351_CLK1, 1);          // switch on 150MHz tone on clock 1
+  si5351.set_clock_pwr(SI5351_CLK0, 0);  // stop transmitting. Switch off clock 0
 }
 //**************************************[ SETUP FUNCTION ]*************************************************
 void setup() {
@@ -531,12 +507,11 @@ void setup() {
 void loop() {
   DateTime now = rtc.now();
   mainScreen();
-  if ((now.minute() % 7 == 0) && (now.second() % 37 == 0)) {  // Update RTC every 7 minutes
+  if ((now.minute() % 32 == 0) && (now.second() % 37 == 0)) {  // Update RTC every hour
     updateRTC();
-    delay(2000);  // the loop runs so fast that without this delay the RTC will be update more than once
-  }
+   }
 
-  if ((now.minute() % 2 == 0) && (now.minute() % txDelay(timeSlots) == 0) && (now.second() == 0)) {  //start encoding at start of even minute
+  if ((now.minute() % txDelay(timeSlots) == 0) && (now.second() == 0)) {  //start encoding at start of even minute
     digitalWrite(LED_BUILTIN, HIGH);
     txOn();
 #ifdef DEBUG
