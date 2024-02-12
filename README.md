@@ -12,5 +12,5 @@ If you run the sketches in order you will be able to see how each component work
 6) Display information on OLED                                      - NTP_Time_RTC_OLED.ino
 7) Add si5351 square wave generator - calibrate using Examples/Etherkit Si5351/si5351_calibration.ino in the Arduino IDE. I changed target_freq on line 32 from 1000000000ULL to 10140200000ULL and used WSJT-X in WSPR mode on 30mtrs to see where my signal was.
 8) Add low pass filter for the band you are using.
-9) Load WSPR_Single_Band. Leave randomChange at 0 until you're sure that you TX is within the WSPR range. This program is still work in progress so will change over time. I'm currently investigating how to reduce drift.
+9) Load WSPR_Single_Band. Leave randomChange at 0 until you're sure that your TX is within the WSPR range. My drift problem was caused by a faulty si5351 so I deleted code that started TX 2 seconds early and that had clock1 at 150MHz when not transmitting WSPR.
     
