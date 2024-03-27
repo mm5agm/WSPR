@@ -1,4 +1,4 @@
-These programs/sketches are from the article "A beginners guide to the Arduino IDE culminating in a single band WSPR beacon" in Practical Wireless, a UK magazine. Publication date is the May issue of PW (out early April) - it will probably run to two, maybe three articles.
+These programs/sketches are from the article "A beginners guide to the Arduino IDE culminating in a single band WSPR beacon" in Practical Wireless, a UK magazine. The article is in 2 parts. Publication date for part 1 is the May issue of PW (out early April).
 Practical Wireless hold the copyright to the printed article and with their permission it will be printed here after publication.
 
 ![Fig 1  Block Diagram](https://github.com/mm5agm/WSPR/assets/26571503/d4f9af83-ccb1-496f-a32a-023caceaa8cf)
