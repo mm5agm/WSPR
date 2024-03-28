@@ -65,6 +65,15 @@ Num Slots	Mins TX 	%TX	      Mins between TX       	0	2	4	6	8	10	12	14	16	18	20	
 
 
 */
+/* Most boards have the built in LED connected to digital pin 13. . boards normally have a definition for LED_BUILTIN
+However, I've recently come accros some boards that don't have LED_BUILTIN defined and the LED is connected to pin2. If you have
+a board where LED_BUILTIN isn't defined the following code will define LED_BUILTIN = 2 and allow the program to compile and load.
+This means that the LED will come on when WSPR is transmitting. If the led doesn't come on you'll need to try other values.
+*/ 
+#ifndef LED_BUILTIN
+#define LED_BUILTIN 2
+#endif
+
 /******************************[ Libraries ]***********************************************************************************/
 #define DEBUG                  // Comment this line to supress debugging to the serial port
 #include "Wire.h"              // arduino
